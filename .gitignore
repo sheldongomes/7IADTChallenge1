@@ -3,6 +3,9 @@
 
 #My Personal Exclusions
 archive.zip
+archive_diabetes.zip
+models/
+results/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

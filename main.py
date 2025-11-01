@@ -1,24 +1,104 @@
 import joblib
+import pandas as pd
+from pathlib import Path
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score, recall_score, f1_score, classification_report
 from src.pre_process import load_and_preprocess
 
-print("=== Diagnostic Support System ===")
-#Running pre_process.py with breast cancer Kaggle file from: https://www.kaggle.com/datasets/uciml/breast-cancer-wisconsin-data?resource=download
-X_train, X_test, y_train, y_test, scaler, features = load_and_preprocess('data/breast_cancer_wisconsin_data.csv')
+#Configuration
+MODELS_DIR = Path("models")
+RESULTS_DIR = Path("results")
+MODELS_DIR.mkdir(exist_ok=True)
+RESULTS_DIR.mkdir(exist_ok=True)
 
-# Creating simple model with RandomForest
-model = RandomForestClassifier(n_estimators=100, random_state=42)
-model.fit(X_train, y_train)
-joblib.dump(model, 'models/breast_cancer_model.pkl')
+#Loading data
+print("Loading Data...")
+X_train, X_test, y_train, y_test, scaler, features = load_and_preprocess('data/breast_cancer_data.csv')
+print(f"Training: {X_train.shape[0]} | Testing: {X_test.shape[0]} | Features: {len(features)}")
 
-# Prediction example with 1st patient sample data:
-sample = X_test[:1]
-pred = model.predict(sample)[0]
-prob_malignant = model.predict_proba(sample)[:, 1][0]
-prob_benign = model.predict_proba(sample)[:, 0][0]
+# === DEFINIR MODELOS ===
+models = {
+    "Random Forest": RandomForestClassifier(n_estimators=200, random_state=42),
+    "Logistic Regression": LogisticRegression(max_iter=1000, random_state=42),
+    "SVM": SVC(probability=True, random_state=42)
+}
 
-print("Patient data:")
-for i, feature in enumerate(features):
-    print(f"  {feature}: {sample[0][i]:.2f}")
-print(f"Prediction: {'Malignant' if pred == 1 else 'Benign'} (Malignant Probability: {prob_malignant:.2f})")
-print("Model saved at models/breast_cancer_model.pkl")
+# === TREINAR E AVALIAR ===
+results = []
+best_model_name = None
+best_recall = 0
+
+print("\n" + "="*60)
+print("        TRAINING 3 MODELS")
+print("="*60)
+
+for name, model in models.items():
+    print(f"\nTraining {name}...")
+    model.fit(X_train, y_train)
+    
+    # Predição
+    y_pred = model.predict(X_test)
+    
+    # Métricas
+    acc = accuracy_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)  # Recall para MALIGNANT
+    f1 = f1_score(y_test, y_pred)
+    
+    results.append({
+        "Model": name,
+        "Accuracy": acc,
+        "Recall (MALIGNANT)": recall,
+        "F1-Score": f1
+    })
+    
+    # Salvar modelo
+    joblib.dump(model, MODELS_DIR / f"{name.lower().replace(' ', '_')}.pkl")
+    
+    # Atualizar melhor modelo (prioriza recall)
+    if recall > best_recall:
+        best_recall = recall
+        best_model_name = name
+
+# === EXIBIR RESULTADOS ===
+df_results = pd.DataFrame(results)
+print("\n" + "="*60)
+print("        RESULT OF MODELS")
+print("="*60)
+print(df_results.round(4).to_string(index=False))
+
+# Salvar tabela
+df_results.to_csv(RESULTS_DIR / "models_comparison.csv", index=False)
+
+# === DEMONSTRAÇÃO COM O MELHOR MODELO ===
+print(f"\nBest Model (greather recall): {best_model_name}")
+best_model = joblib.load(MODELS_DIR / f"{best_model_name.lower().replace(' ', '_')}.pkl")
+
+# Escolher um paciente MALIGNANT com alta confiança
+idx = next((i for i in range(len(y_test)) 
+            if y_test.iloc[i] == 1 and 
+               best_model.predict_proba(X_test[i:i+1])[0][1] > 0.90), 
+           y_test[y_test == 1].index[0])
+
+sample = X_test[idx:idx+1]
+pred = best_model.predict(sample)[0]
+probs = best_model.predict_proba(sample)[0]
+prob_malignant = probs[1]
+
+print("\n" + "="*60)
+print("        REAL CASE DEMONSTRATION (MALIGNANT)")
+print("="*60)
+print(f"REAL Diagnostic: MALIGNANT")
+print("Pacient Data (relevants):")
+for i, f in enumerate(features[:6]):
+    print(f"  {f:20}: {sample[0][i]:.2f}")
+print(f"\nPrediction of Model: {'MALIGNANT' if pred == 1 else 'BENIGNO'}")
+print(f"  → Confidence MALIGNANT: {prob_malignant:.1%}")
+print(f"  → Confidence BENIGN: {probs[0]:.1%}")
+print("="*60)
+
+# === SALVAR MELHOR MODELO PARA PRODUÇÃO ===
+joblib.dump(best_model, MODELS_DIR / "best_model.pkl")
+joblib.dump(scaler, MODELS_DIR / "scaler.pkl")
+print(f"\nModel saved at: {MODELS_DIR}/best_model.pkl")
