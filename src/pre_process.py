@@ -4,7 +4,7 @@ from sklearn.preprocessing import StandardScaler
 
 def load_and_preprocess():
     # Load data
-    data = pd.read_csv('../data/breastCancerWisconsinData.csv')
+    data = pd.read_csv('../data/breast_cancer_wisconsin_data.csv')
     data = data.drop('id', axis=1)
     
     # Diagnosis: Malignant -> 1, Benign -> 0
@@ -23,11 +23,9 @@ def load_and_preprocess():
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
     
-    print(y_train)
-    print(y_test)    
-    print(X_train_scaled)
-    print(X_test_scaled)
 
-    #return X_train_scaled, X_test_scaled, y_train, y_test, scaler, X.columns
+    return X_train_scaled, X_test_scaled, y_train, y_test, scaler, X.columns
 
-load_and_preprocess()
+rX_train_scaled, rX_test_scaled, ry_train, ry_test, rscaler, rX_columns  = load_and_preprocess()
+print('Result: ')
+print(ry_test)
