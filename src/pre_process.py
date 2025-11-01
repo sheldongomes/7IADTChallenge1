@@ -2,12 +2,12 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
-def load_and_preprocess():
-    # Load data
-    data = pd.read_csv('../data/breast_cancer_wisconsin_data.csv')
+def load_and_preprocess(data_path):
+    # Load data using pandas. The path of CSV file must be passed to call this function
+    data = pd.read_csv(data_path)
     data = data.drop('id', axis=1)
     
-    # Diagnosis: Malignant -> 1, Benign -> 0
+    # Diagnosis: Will be classified as: Malignant -> 1, Benign -> 0
     data['diagnosis'] = data['diagnosis'].map({'M': 1, 'B': 0})
     
     X = data.drop('diagnosis', axis=1)
@@ -15,17 +15,16 @@ def load_and_preprocess():
     
     # Train / Test split
     X_train, X_test, y_train, y_test = train_test_split(
+        # The value 0.2 as size means we will use 80% of the data to learn and 20% to test
+        # random_state is being used to have equal results in all tests (the value 42 is the magic number from Douglas Adams book, but any value can be used)
+        # Stratify=y will keeps the same proportion of Malignant and Benign between test and training data
         X, y, test_size=0.2, random_state=42, stratify=y
     )
     
-    # Escalar
+    # Scale the train and test results to be returned
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
     
-
-    return X_train_scaled, X_test_scaled, y_train, y_test, scaler, X.columns
-
-rX_train_scaled, rX_test_scaled, ry_train, ry_test, rscaler, rX_columns  = load_and_preprocess()
-print('Result: ')
-print(ry_test)
+    # return data
+    return X_train_scaled, X_test_scaled, y_train, y_test, scaler, X.columns.tolist()
