@@ -9,14 +9,16 @@ X_train, X_test, y_train, y_test, scaler, features = load_and_preprocess('data/b
 # Creating simple model with RandomForest
 model = RandomForestClassifier(n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
-joblib.dump(model, 'models/rf_model.pkl')
+joblib.dump(model, 'models/breast_cancer_model.pkl')
 
 # Prediction example with 1st patient sample data:
 sample = X_test[:1]
 pred = model.predict(sample)[0]
 prob_malignant = model.predict_proba(sample)[:, 1][0]
+prob_benign = model.predict_proba(sample)[:, 0][0]
+
 print("Patient data:")
 for i, feature in enumerate(features):
     print(f"  {feature}: {sample[0][i]:.2f}")
 print(f"Prediction: {'Malignant' if pred == 1 else 'Benign'} (Malignant Probability: {prob_malignant:.2f})")
-print("Model saved at models/rf_model.pkl")
+print("Model saved at models/breast_cancer_model.pkl")
