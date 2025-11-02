@@ -4,14 +4,14 @@ from sklearn.preprocessing import StandardScaler
 
 def load_and_preprocess(data_path):
     # Load data using pandas. The path of CSV file must be passed to call this function
-    data = pd.read_csv(data_path)
-    data = data.drop('id', axis=1)
+    file_data = pd.read_csv(data_path)
+    file_data = file_data.drop('id', axis=1)
     
     # Diagnosis: Will be classified as: Malignant -> 1, Benign -> 0
-    data['diagnosis'] = data['diagnosis'].map({'M': 1, 'B': 0})
+    file_data['diagnosis'] = file_data['diagnosis'].map({'M': 1, 'B': 0})
     
-    X = data.drop('diagnosis', axis=1)
-    y = data['diagnosis']
+    X = file_data.drop('diagnosis', axis=1)
+    y = file_data['diagnosis']
     
     # Train / Test split
     X_train, X_test, y_train, y_test = train_test_split(
