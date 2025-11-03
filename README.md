@@ -83,5 +83,5 @@ I did create a Postman collection as well, this collection is available in the f
 Ensure you have Docker installed in your computer.
 Execute steps below:
 
-docker build -t 7iadtchallenge1 . # this command will build your docker file
-docker run -p 8000:8000 7iadtchallenge1 # this command will run your docker file
+docker build -t 7iadtchallenge1 . /*this command will build your docker file/*
+docker run -p 8000:8000 7iadtchallenge1 /*this command will run your docker file/*
