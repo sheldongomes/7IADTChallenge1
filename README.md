@@ -61,3 +61,13 @@ Store some codes created for testing.
 * test_model.py : Using static data in the code predict diagnostic using the best model (Logistic Regression).
 
 ### /utils
+Store clean_csv.py code that is being used to prepare the data.
+
+### main.py
+Code created to:
+- load the data;
+- Training and assesment;
+- Test the model;
+- Store models in /models folder;
+- Choose the best model;
+- Display the results.
