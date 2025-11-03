@@ -1,34 +1,47 @@
-# api/model.py
 import joblib
 import pandas as pd
 from pathlib import Path
 
-# Caminho relativo
+# Declaring files path
 ROOT_DIR = Path(__file__).parent.parent
-MODEL_PATH = ROOT_DIR / "models" / "logistic_regression.pkl"
+BEST_MODEL_PATH = ROOT_DIR / "models" / "logistic_regression.pkl"
+RANDOM_MODEL_PATH = ROOT_DIR / "models" / "random_forest.pkl"
+SVM_MODEL_PATH = ROOT_DIR / "models" / "svm.pkl"
 SCALER_PATH = ROOT_DIR / "models" / "scaler.pkl"
 FEATURES_PATH = ROOT_DIR / "models" / "feature_names.pkl"
 
-# Carregar
-print("Carregando modelo...")
-model = joblib.load(MODEL_PATH)
+# Loading scaler and features
+print("Loading Models...")
 scaler = joblib.load(SCALER_PATH)
 features = joblib.load(FEATURES_PATH)
-print(f"Modelo carregado: {type(model).__name__}")
-print(f"Esperando {len(features)} features")
+print(f"Waiting {len(features)} features")
 
-def predict_paciente(paciente_dict: dict):
-    # Converter para DataFrame
+def predict_paciente(paciente_dict: dict, model_name):
+    #Loading model based on the request path
+    print('Model Name: ' + str(model_name))
+    if model_name is None or model_name == 'best' or model_name == 'logistic_regression':
+        model = joblib.load(BEST_MODEL_PATH)
+        print('Case 1')
+    elif model_name == 'random_forest':
+        model = joblib.load(RANDOM_MODEL_PATH)
+        print('Case 2')
+    elif model_name == 'svm':
+        model = joblib.load(SVM_MODEL_PATH)
+        print('Case 3')
+    print(f"Model requested: {type(model).__name__}")
+    
+    # Converting to DataFrame
     X = pd.DataFrame([paciente_dict])
-    X = X[features]  # Garantir ordem
+    X = X[features]  # Ensure we have feature sorted
     X_scaled = scaler.transform(X)
     
-    # Predição
+    # Prediction Benign vs Malignant
     pred = int(model.predict(X_scaled)[0])
     prob = model.predict_proba(X_scaled)[0]
     
     return {
-        "diagnostico": "MALIGNO" if pred == 1 else "BENIGNO",
-        "probabilidade_maligno": round(prob[1], 4),
-        "probabilidade_benigno": round(prob[0], 4)
+        "model": type(model).__name__,
+        "diagnostic": "MALIGNANT" if pred == 1 else "BENIGN",
+        "malignant_probability": f"{prob[1]*100:.4f} %",
+        "benign_probability": f"{prob[0]*100:.4f} %"
     }

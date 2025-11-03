@@ -10,10 +10,11 @@ import shap
 import matplotlib.pyplot as plt
 from pathlib import Path
 
+# Path to save the results
 RESULTS_DIR = Path("results/explainability")
 RESULTS_DIR.mkdir(exist_ok=True)
 
-# Carregar
+# Loading model
 model = joblib.load('models/logistic_regression.pkl')
 X_train, X_test, y_train, y_test, _, features = load_and_preprocess('data/breast_cancer_data.csv')
 
@@ -44,7 +45,7 @@ plt.tight_layout()
 plt.savefig(RESULTS_DIR / 'shap_summary.png', dpi=150)
 plt.close()
 
-# 3. Explicação local
+# 3. Local explanation
 idx = 0
 shap.force_plot(
     explainer.expected_value,
@@ -54,9 +55,9 @@ shap.force_plot(
     matplotlib=True,
     show=False
 )
-plt.title('Explicação Local - Paciente MALIGNO')
+plt.title('Local explanation - Patient MALIGNANT')
 plt.tight_layout()
-plt.savefig(RESULTS_DIR / 'shap_force_maligno.png', dpi=150)
+plt.savefig(RESULTS_DIR / 'shap_force_malignant.png', dpi=150)
 plt.close()
 
-print(f"Interpretação concluída! Gráficos em: {RESULTS_DIR}")
+print(f"Interpretation completed! Graphics available at: {RESULTS_DIR}")

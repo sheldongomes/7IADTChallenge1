@@ -47,9 +47,9 @@ stats_final = pd.DataFrame({
 print("\nDescriptive Statistics:")
 print(stats_final)
 
-# Salvar em CSV
+# Saving in CSV file
 stats_final.to_csv(RESULTS_DIR / "desctiptive_statistics.csv")
-print(f"\nTabela salva em: {RESULTS_DIR / 'desctiptive_statistics.csv'}")
+print(f"\nTable saved at: {RESULTS_DIR / 'desctiptive_statistics.csv'}")
 
 # 3. Histogram
 plt.figure(figsize=(10,6))

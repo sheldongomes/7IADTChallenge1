@@ -24,7 +24,7 @@ new_patient = {
     'smoothness_mean': 0.11840,
     'compactness_mean': 0.27760,
     'concavity_mean': 0.3001,
-    'concave points_mean': 0.14710,
+    'concave_points_mean': 0.14710,
     'symmetry_mean': 0.2419,
     'fractal_dimension_mean': 0.07871,
     'radius_se': 1.0950,
@@ -34,7 +34,7 @@ new_patient = {
     'smoothness_se': 0.006399,
     'compactness_se': 0.04904,
     'concavity_se': 0.05373,
-    'concave points_se': 0.01587,
+    'concave_points_se': 0.01587,
     'symmetry_se': 0.03003,
     'fractal_dimension_se': 0.006193,
     'radius_worst': 25.38,
@@ -44,7 +44,7 @@ new_patient = {
     'smoothness_worst': 0.1622,
     'compactness_worst': 0.6656,
     'concavity_worst': 0.7119,
-    'concave points_worst': 0.2654,
+    'concave_points_worst': 0.2654,
     'symmetry_worst': 0.4601,
     'fractal_dimension_worst': 0.11890
 }

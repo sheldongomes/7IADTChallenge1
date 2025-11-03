@@ -14,12 +14,13 @@ from sklearn.calibration import calibration_curve
 import matplotlib.pyplot as plt
 from pathlib import Path
 
+# Path to save the results
 RESULTS_DIR = Path("results/modeling")
 RESULTS_DIR.mkdir(exist_ok=True)
 
 # Loading Data
 X_train, X_test, y_train, y_test, scaler, features = load_and_preprocess('data/breast_cancer_data.csv')
-print(f"Treino: {X_train.shape} | Teste: {X_test.shape}")
+print(f"Training: {X_train.shape} | Testing: {X_test.shape}")
 
 # Models
 models = {
@@ -31,7 +32,7 @@ models = {
 results = []
 trained_models = {}
 
-print("\nTreinando modelos...")
+print("\nTraining models...")
 for name, model in models.items():
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
@@ -52,7 +53,7 @@ print("\Results:")
 print(df_results.to_string(index=False))
 df_results.to_csv(RESULTS_DIR / "models_comparison.csv", index=False)
 
-# Curva de calibração
+# Calibration curve
 log_model = trained_models['Logistic Regression']
 svm_model = trained_models['SVM']
 
