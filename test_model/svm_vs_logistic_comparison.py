@@ -1,6 +1,5 @@
 import joblib
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.calibration import calibration_curve
 from pathlib import Path

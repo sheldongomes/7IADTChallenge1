@@ -8,7 +8,6 @@ import joblib
 import pandas as pd
 import shap
 import matplotlib.pyplot as plt
-from pathlib import Path
 
 # Path to save the results
 RESULTS_DIR = Path("results/explainability")

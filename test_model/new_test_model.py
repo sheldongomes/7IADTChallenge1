@@ -29,7 +29,7 @@ else:
     y_real = None
     X_new = file_data.copy()
 
-# Force correct order
+# Force to sort it correct
 X_new = X_new[feature_names]
 
 # Scale and prediction

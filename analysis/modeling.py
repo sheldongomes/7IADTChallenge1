@@ -12,7 +12,6 @@ from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score, recall_score, f1_score
 from sklearn.calibration import calibration_curve
 import matplotlib.pyplot as plt
-from pathlib import Path
 
 # Path to save the results
 RESULTS_DIR = Path("results/modeling")

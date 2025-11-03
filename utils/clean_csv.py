@@ -1,32 +1,31 @@
-# scripts/clean_csv.py
 import pandas as pd
 from pathlib import Path
 
-# Caminhos
+# Declaring data path
 RAW_PATH = Path("data/breast_cancer_data_raw.csv")
 CLEAN_PATH = Path("data/breast_cancer_data.csv")
 
-# 1. Ler o CSV original
-print("Lendo CSV original...")
+# 1. Loading original CSV file
+print("Loading original CSV file...")
 df = pd.read_csv(RAW_PATH)
 
-print(f"Shape original: {df.shape}")
-print(f"Colunas originais: {list(df.columns)}")
+print(f"Original shape: {df.shape}")
+print(f"Original Colums: {list(df.columns)}")
 
-# 2. Remover colunas completamente vazias (NaN ou Unnamed)
+# 2. Removing empty columns (NaN ou Unnamed)
 df = df.loc[:, ~df.columns.str.contains('^Unnamed')]  # Remove "Unnamed: 0", etc.
-df = df.dropna(axis=1, how='all')  # Remove colunas 100% NaN
+df = df.dropna(axis=1, how='all')  # Remove columns 100% NaN
 
 print(f"Shape após remover vazias: {df.shape}")
 
-# 3. Verificar se sobrou 32 colunas (id + diagnosis + 30 features)
+# 3. Checking if remain 32 columns (id + diagnosis + 30 features)
 expected_cols = 32
 if df.shape[1] != expected_cols:
-    print(f"ERRO: Esperado {expected_cols} colunas, mas tem {df.shape[1]}")
-    print("Colunas atuais:", list(df.columns)[:10], "...")
-    raise ValueError(f"Verifique o CSV! Colunas: {df.shape[1]}")
+    print(f"ERROR: Expected {expected_cols} columns, but remain {df.shape[1]}")
+    print("Current columns:", list(df.columns)[:10], "...")
+    raise ValueError(f"Check CSV file! Columns: {df.shape[1]}")
 
-# 4. Definir nomes corretos (32 colunas)
+# 4. Defining correct names (32 columns)
 column_names = [
     'id', 'diagnosis',
     'radius_mean', 'texture_mean', 'perimeter_mean', 'area_mean',
@@ -40,14 +39,14 @@ column_names = [
     'symmetry_worst', 'fractal_dimension_worst'
 ]
 
-# 5. Atribuir nomes
+# 5. Assigning names
 df.columns = column_names
 
-# 6. Garantir tipo
+# 6. Ensuring the type
 df['diagnosis'] = df['diagnosis'].astype(str).str.strip()
 
-# 7. Salvar CSV limpo
+# 7. Writing final CSV (with intended values)
 df.to_csv(CLEAN_PATH, index=False)
-print(f"\nCSV limpo salvo em: {CLEAN_PATH}")
-print(f"Colunas finais: {list(df.columns)}")
-print(f"Primeiras linhas:\n{df.head(2)}")
+print(f"\nFinal CSV saved at: {CLEAN_PATH}")
+print(f"Final columns: {list(df.columns)}")
+print(f"First lines:\n{df.head(2)}")
