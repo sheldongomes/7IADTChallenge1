@@ -39,9 +39,25 @@ Store patients data.
 
 ### /models
 Store generated models, scaler and feature names.
+This folder is not being published to github it is in __.gitignore__ file.
 * scaler.pkl : Store the data scale. The /src/pre_process.py scale the data that will be used by the model. This scale is stored to be used on tests and predictions.
 * feature_names.pkl : Store the list of feature names. These names are the column names of the breast cancer diagnostics file.
 * logistic_regression.pkl : model created using Logistic Regression.
 * random_forest.pkl : model created using Random Forrest.
 * svm.pkl : model created using SVM.
 * best_model.pkl : best model between the modles used.
+
+### /results
+Storing results of analysis, tests and model creation.
+Each analysis code have its own folder. You can see the folder the result is being saved in the console.
+
+### /src
+In the division of the code the src folder contains only the file __pre_process.py__ that is being used to process the data before expose it to the models.
+
+### /test_model
+Store some codes created for testing.
+* new_test_model.py : Using patients data from 'data/patients_test.csv' Predict the diagnostic using the best model (Logistic Regression).
+* svm_vs_logistic_comparison.py : Using patients data from 'data/patients_test.csv' compare the diagnostic prediction between SVM and Logistic Regretion models.
+* test_model.py : Using static data in the code predict diagnostic using the best model (Logistic Regression).
+
+### /utils
