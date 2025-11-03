@@ -71,3 +71,17 @@ Code created to:
 - Store models in /models folder;
 - Choose the best model;
 - Display the results.
+
+### Code initialization and details
+I created a Dockerfile that will implement this code in a container.
+When running it with Docker the main.py code will be executed to generate all models.
+A second command will be used to initialize /api/main.py that will expose these models through API in your computer port 8000 (When running the code please ensure this port is not being used by any other application).
+You can access API documentation in the URL: http://localhost:8000/docs
+I did create a Postman collection as well, this collection is available in the folder /utils/FIAP_Tech_Challenge_1.postman_collection.json
+
+#### Running the code
+Ensure you have Docker installed in your computer.
+Execute steps below:
+
+docker build -t 7iadtchallenge1 . # this command will build your docker file
+docker run -p 8000:8000 7iadtchallenge1 # this command will run your docker file

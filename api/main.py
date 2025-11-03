@@ -1,7 +1,12 @@
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 from api.model import predict_paciente
 from api.schemas import PacienteInput
 import uvicorn
+
+RESULTS_DIR = Path("results")
+TEMPLATES_DIR = Path("templates")
 
 app = FastAPI(
     title="Breast Cancer Diagnostic System",
@@ -26,6 +31,9 @@ def predict(paciente: PacienteInput, request: Request):
         return resultado
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+app.mount("/templates", StaticFiles(directory="templates", html=True), name="templates")
+app.mount("/results", StaticFiles(directory=RESULTS_DIR, html=True), name="results")
 
 # Execute with: uvicorn api.main:app --reload
 if __name__ == "__main__":

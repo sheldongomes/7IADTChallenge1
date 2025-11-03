@@ -61,7 +61,7 @@ plt.close()
 
 # 4. Boxplot
 plt.figure(figsize=(10,6))
-sns.boxplot(data=df, x='diagnosis', y='concave points_worst', palette=['#66b3ff', '#ff9999'])
+sns.boxplot(data=df, x='diagnosis', y='concave_points_worst', palette=['#66b3ff', '#ff9999'])
 plt.title('Concave Pints (worst region): Benign vs Malignant')
 plt.ylabel('Concave Points Worst')
 plt.savefig(RESULTS_DIR / 'box_concave_worst.png', dpi=150, bbox_inches='tight')
