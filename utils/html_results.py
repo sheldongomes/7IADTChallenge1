@@ -10,7 +10,7 @@ OUTPUT_FILE = TEMPLATE_DIR / "results.html"
 def generate_html():
     # RECURSIVE SEARCH: **all files in subfolders**
     files = sorted(
-        RESULTS_DIR.rglob("*"),  # <-- CHANGE THIS LINE
+        RESULTS_DIR.rglob("*"),
         key=lambda x: x.stat().st_mtime,
         reverse=True
     )
@@ -24,7 +24,7 @@ def generate_html():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resultados do Modelo de Câncer</title>
+    <title>Breast Cancer Model Results</title>
     <style>
         body {{font-family: 'Segoe UI', sans-serif; background: #f4f7fa; color: #333; margin: 0; padding: 20px;}}
         .container {{max-width: 1100px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);}}
@@ -42,32 +42,32 @@ def generate_html():
 </head>
 <body>
     <div class="container">
-        <h1>Resultados do Modelo de Câncer de Mama</h1>
-        <p><strong>Total de arquivos:</strong> {len(files)} (incluindo subpastas)</p>
+        <h1>Breast Cancer Model Results</h1>
+        <p><strong>Total of files:</strong> {len(files)} (including sub folders)</p>
         
         <table>
             <thead>
                 <tr>
-                    <th>Caminho</th>
-                    <th>Arquivo</th>
-                    <th>Tipo</th>
-                    <th>Tamanho</th>
-                    <th>Modificado</th>
-                    <th>Ação</th>
+                    <th>Path</th>
+                    <th>File</th>
+                    <th>Type</th>
+                    <th>Size</th>
+                    <th>Modification</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
     """
 
     for file in files:
-        rel_path = file.relative_to(RESULTS_DIR)  # ex: "2025/calibration.png"
+        rel_path = file.relative_to(RESULTS_DIR) 
         parent_dir = str(rel_path.parent) if rel_path.parent != Path(".") else "raiz"
         size = file.stat().st_size
         size_str = f"{size/1024:.1f} KB" if size < 1024*1024 else f"{size/(1024*1024):.1f} MB"
         mod_time = datetime.fromtimestamp(file.stat().st_mtime).strftime("%d/%m/%Y %H:%M")
         
         ext = file.suffix.lower()
-        file_type = "Desconhecido"
+        file_type = "Unknown"
         preview = ""
 
         if ext in ['.png', '.jpg', '.jpeg', '.gif']:
@@ -77,7 +77,7 @@ def generate_html():
                     encoded = base64.b64encode(img.read()).decode()
                 preview = f'<img src="data:image/png;base64,{encoded}" class="image-preview" alt="{file.name}">'
             except:
-                preview = "<em>Erro ao carregar</em>"
+                preview = "<em>Error to load</em>"
         elif ext == '.csv':
             file_type = "CSV"
         elif ext == '.pkl':
@@ -107,7 +107,7 @@ def generate_html():
             </tbody>
         </table>
         <div class="footer">
-            <p>Gerado em {datetime.now().strftime("%d/%m/%Y %H:%M")} | Inclui subpastas</p>
+            <p>Generated on {datetime.now().strftime("%d/%m/%Y %H:%M")} | Contains sub folders</p>
         </div>
     </div>
 </body>
@@ -115,7 +115,7 @@ def generate_html():
     """
 
     OUTPUT_FILE.write_text(html_content, encoding='utf-8')
-    print(f"HTML gerado: {OUTPUT_FILE} ({len(files)} arquivos)")
+    print(f"HTML generated: {OUTPUT_FILE} ({len(files)} files)")
 
 if __name__ == "__main__":
     generate_html()

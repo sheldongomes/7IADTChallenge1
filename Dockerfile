@@ -41,4 +41,4 @@ RUN chmod +x main.py
 
 # ---- Rodar init + API ------------------------------------------
 ENTRYPOINT ["/bin/bash", "-c"]
-CMD ["python main.py && python -m uvicorn api.main:app --host 0.0.0.0 --port 8000"]
+CMD ["python main.py && python /app/analysis/eda.py && python /app/analysis/explainability.py && python /app/analysis/modeling.py && python /app/utils/html_results.py && python -m uvicorn api.main:app --host 0.0.0.0 --port 8000"]

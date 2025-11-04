@@ -74,7 +74,8 @@ Code created to:
 
 ### Code initialization and details
 I created a Dockerfile that will implement this code in a container.
-When running it with Docker the main.py code will be executed to generate all models.
+When running it with Docker the sequence of codes below will be executed:
+- main.py : will be executed to generate all models.
 A second command will be used to initialize /api/main.py that will expose these models through API in your computer port 8000 (When running the code please ensure this port is not being used by any other application).
 You can access API documentation in the URL: http://localhost:8000/docs
 I did create a Postman collection as well, this collection is available in the folder /utils/FIAP_Tech_Challenge_1.postman_collection.json
