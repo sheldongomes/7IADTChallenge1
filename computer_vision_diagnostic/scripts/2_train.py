@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 # Configuration and paths
 BASE_DIR = Path(__file__).parent.parent
 TRAIN_DIR = BASE_DIR / "data" / "train"
+RESULTS_DIR = BASE_DIR / "results"
 MODEL_DIR = BASE_DIR / "models"
 MODEL_DIR.mkdir(exist_ok=True)
 MODEL_PATH = MODEL_DIR / "cancer_vision_model.h5"
@@ -109,7 +110,7 @@ def plot_training_history(history):
     ax2.grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plot_path = MODEL_DIR / "training_history.png"
+    plot_path = RESULTS_DIR / "training_history.png"
     plt.savefig(plot_path, dpi=300, bbox_inches='tight')
     print(f"GRAPHIC SAVED: {plot_path}")
     plt.show()
