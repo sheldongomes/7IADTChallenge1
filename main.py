@@ -4,7 +4,7 @@ from pathlib import Path
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score, recall_score, f1_score, classification_report
+from sklearn.metrics import accuracy_score, recall_score, f1_score, precision_score, classification_report
 from src.pre_process import load_and_preprocess
 
 #Setup of directories
@@ -44,13 +44,15 @@ for name, model in models.items():
     # Metrics
     acc = accuracy_score(y_test, y_pred)
     recall = recall_score(y_test, y_pred)  # Recall for MALIGNANT
+    precision = precision_score(y_test, y_pred, pos_label=1)
     f1 = f1_score(y_test, y_pred)
     
     results.append({
         "Model": name,
-        "Accuracy": acc,
-        "Recall (MALIGNANT)": recall,
-        "F1-Score": f1
+        "Accuracy": round(acc, 5),
+        "Precision (MALIGNANT)": round(precision, 5),
+        "Recall (MALIGNANT)": round(recall, 5),
+        "F1-Score": round(f1, 5)
     })
     
     # Saving models

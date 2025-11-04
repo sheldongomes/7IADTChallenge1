@@ -1,9 +1,17 @@
 import pandas as pd
+import os
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+from utils.clean_csv import clean_csv
 
 def load_and_preprocess(data_path):
     # Load data using pandas. The path of CSV file must be passed to call this function
+    if os.path.isfile(data_path):
+        print("Formatted file exists")
+    else:
+        print('Formatting file')
+        clean_csv()
+    
     file_data = pd.read_csv(data_path)
     file_data = file_data.drop('id', axis=1)
     
