@@ -76,11 +76,14 @@ Code created to:
 I created a Dockerfile that will implement this code in a container.
 When running it with Docker the sequence of codes below will be executed:
 - main.py : will be executed to generate all models.
-A second command will be used to initialize /api/main.py that will expose these models through API in your computer port 8000 (When running the code please ensure this port is not being used by any other application).
-You can access API documentation in the URL: http://localhost:8000/docs
-I did create a Postman collection as well, this collection is available in the folder /utils/FIAP_Tech_Challenge_1.postman_collection.json
+- eda.py | explainability.py | modeling.py : All analysis code will run and generate graphics and reports.
+- api.main.py : will be executed with uvicorn to keep the API endpoint running.
+The initialization of /api/main.py will expose these models through API in your computer port 8000 (When running the code please ensure this port is not being used by any other application).
+You can access API documentation in the URL: __http://localhost:8000/docs__
+I did create a Postman collection as well, this collection is available in the folder __/utils/FIAP_Tech_Challenge_1.postman_collection.json__
+All graphics and reports are available to download in the link: __http://localhost:8000/templates/results.html__
 
-#### Running the code
+#### Running the code with Docker
 Ensure you have Docker installed in your computer.
 Execute steps below:
 ```
@@ -89,3 +92,25 @@ docker run -p 8000:8000 7iadtchallenge1
 ```
 The first line will build your docker image.
 The second line will run it.
+
+### Extra Challenge (Computer Vision Diagnostic)
+This extra challenge code was developed but it is not being initialized in Docker.
+The reason is because of the amount of data downloaded to run it is close to 5GB.
+The data source is available at: https://www.kaggle.com/datasets/awsaf49/cbis-ddsm-breast-cancer-image-dataset/data
+Follow the steps below to run and test this extra code:
+
+1. Clone this repository: (help link) https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository
+2. Download dataset from the url below, extract data and copy csv and jpeg folders in project path /computer_vision_diagnostic/data/raw
+3. Create new virtual environment and install requirements.txt:
+```
+python -m venv my_env
+source venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+4. Run python scripts in the sequence of names using python as below:
+- 1_organize_data.py : will organize the CSV and jpeg files data. Changing the format of the CSV files and storing it in the folder /computer_vision_diagnostic/data/updated.
+Will move jpeg files into train and test folders.
+- 2_train.py : will be training and saving the model and generating a graphic report.
+- 3_evaluate.py : will evaluate the test data and display the results.
+- 4_predict.py : in this code we are using the model to predict some exams. These exames are not related with any initial one and we are downloading them from internet.
