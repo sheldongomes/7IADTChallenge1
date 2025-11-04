@@ -6,6 +6,10 @@ archive.zip
 archive_diabetes.zip
 models/
 results/
+computer_vision_diagnostic/data/raw
+computer_vision_diagnostic/data/archive.zip
+computer_vision_diagnostic/data/train
+computer_vision_diagnostic/data/test
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
